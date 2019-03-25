@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">小酷天气</string>
+    <string name="life_advice">生活建议</string>
+    <string name="forecast">预报</string>
+    <string name="aqi">空气质量</string>
+    <string name="aqi_index">AQI 指数</string>
+    <string name="pm2_5_index">PM2.5 指数</string>
+</resources>
