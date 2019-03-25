@@ -13,14 +13,17 @@ class ChooseAreaAdapter(context: Context, private val resId: Int, private val da
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val bind: SimpleItemBinding?
-        val view = if (convertView == null) {
-            val v = LayoutInflater.from(context).inflate(resId, parent, false)
-            bind = DataBindingUtil.bind(v)
-            v.tag = bind
-            v
-        } else {
-            bind = convertView.tag as SimpleItemBinding
-            convertView
+        val view = when (convertView) {
+            null -> {
+                val v = LayoutInflater.from(context).inflate(resId, parent, false)
+                bind = DataBindingUtil.bind(v)
+                v.tag = bind
+                v
+            }
+            else -> {
+                bind = convertView.tag as SimpleItemBinding
+                convertView
+            }
         }
         bind?.data = dataList[position]
         return view

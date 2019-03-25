@@ -1,33 +1,23 @@
 package com.cool.weather.data
 
 import com.cool.weather.data.db.WeatherDao
-import com.cool.weather.data.model.weather.Weather
 import com.cool.weather.data.network.CoolWeatherNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class WeatherRepository private constructor(private val weatherDao: WeatherDao, private val network: CoolWeatherNetwork) {
+class WeatherRepository private constructor(
+    private val weatherDao: WeatherDao,
+    private val network: CoolWeatherNetwork
+) {
 
-    suspend fun getWeather(weatherId: String, key: String): Weather {
-        var weather = weatherDao.getCachedWeatherInfo()
-        if (weather == null) weather = requestWeather(weatherId, key)
-        return weather
-    }
+    suspend fun getWeather(weatherId: String, key: String) =
+        weatherDao.getCachedWeatherInfo() ?: requestWeather(weatherId, key)
 
     suspend fun refreshWeather(weatherId: String, key: String) = requestWeather(weatherId, key)
-
-    suspend fun getBingPic(): String {
-        var url = weatherDao.getCachedBingPic()
-        if (url == null) url = requestBingPic()
-        return url
-    }
-
+    suspend fun getBingPic() = weatherDao.getCachedBingPic() ?: requestBingPic()
     suspend fun refreshBingPic() = requestBingPic()
-
     fun isWeatherCached() = weatherDao.getCachedWeatherInfo() != null
-
     fun getCachedWeather() = weatherDao.getCachedWeatherInfo()!!
-
     private suspend fun requestWeather(weatherId: String, key: String) = withContext(Dispatchers.IO) {
         val heWeather = network.fetchWeather(weatherId, key)
         val weather = heWeather.weather!![0]
@@ -35,27 +25,18 @@ class WeatherRepository private constructor(private val weatherDao: WeatherDao, 
         weather
     }
 
-    private suspend fun requestBingPic() =withContext(Dispatchers.IO) {
+    private suspend fun requestBingPic() = withContext(Dispatchers.IO) {
         val url = network.fetchBingPic()
         weatherDao.cacheBingPic(url)
         url
     }
 
     companion object {
-
         private var instance: WeatherRepository? = null
-
-        fun getInstance(weatherDao: WeatherDao, network: CoolWeatherNetwork): WeatherRepository {
-            if (instance == null) {
-                synchronized(WeatherRepository::class.java) {
-                    if (instance == null) {
-                        instance = WeatherRepository(weatherDao, network)
-                    }
-                }
+        fun getInstance(weatherDao: WeatherDao, network: CoolWeatherNetwork) =
+            instance ?: synchronized(WeatherRepository::class.java) {
+                instance ?: WeatherRepository(weatherDao, network)
             }
-            return instance!!
-        }
-
     }
 
 }
