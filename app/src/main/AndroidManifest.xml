@@ -15,7 +15,8 @@
             android:theme="@style/AppTheme"
             android:networkSecurityConfig="@xml/network_security_config"
             tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name="com.cool.weather.ui.MainActivity">
+        <activity android:name="com.cool.weather.ui.MainActivity"
+                  android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>

@@ -8,8 +8,8 @@ import com.cool.weather.ui.MainModelFactory
 import com.cool.weather.ui.area.ChooseAreaModelFactory
 import com.cool.weather.ui.weather.WeatherModelFactory
 
+// 依赖注入工具
 object InjectorUtil {
-
     private fun getPlaceRepository() =
         PlaceRepository.getInstance(CoolWeatherDatabase.getPlaceDao(), CoolWeatherNetwork.getInstance())
 
@@ -17,9 +17,7 @@ object InjectorUtil {
         WeatherRepository.getInstance(CoolWeatherDatabase.getWeatherDao(), CoolWeatherNetwork.getInstance())
 
     fun getChooseAreaModelFactory() = ChooseAreaModelFactory(getPlaceRepository())
-
     fun getWeatherModelFactory() = WeatherModelFactory(getWeatherRepository())
-
     fun getMainModelFactory() = MainModelFactory(getWeatherRepository())
 
 }
